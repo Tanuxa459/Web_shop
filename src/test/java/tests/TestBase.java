@@ -40,11 +40,6 @@ public class TestBase {
 
     }
 
-//    @AfterEach
-//    void closeWebdriver() {
-//        Selenide.closeWebDriver();
-//    }
-
     @BeforeAll
     static void setup() {
 
@@ -80,7 +75,7 @@ public class TestBase {
     }
 
 
-    String authMetod(String login, String password) {
+    public String authMetod(String login, String password) {
 
 
         String authCookieKey = "NOPCOMMERCE.AUTH";
@@ -98,6 +93,25 @@ public class TestBase {
 
         return authCookieValue;
     }
+
+//    public String qualityCartMetod(String login, String password) {
+//
+//
+//        String authCookieKey = "NOPCOMMERCE.AUTH";
+//        String authCookieValue = given()
+//                .contentType("application/x-www-form-urlencoded")
+//                .formParam("Email", login)
+//                .formParam("Password", password)
+//                .when()
+//                .post("/login")
+//                .then()
+//                .log().all()
+//                .statusCode(302)
+//                .extract()
+//                .cookie(authCookieKey);
+//
+//        return authCookieValue;
+//    }
 
 
 }

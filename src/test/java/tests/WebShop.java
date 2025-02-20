@@ -14,6 +14,8 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
+import static specs.TestSpec.addRequestSpec;
+import static specs.TestSpec.addResponseSpec;
 
 @Tag("ApiUiTests")
 public class WebShop extends TestBase {
@@ -31,10 +33,10 @@ public class WebShop extends TestBase {
         getWebDriver().manage().addCookie(authCookie);
 
 
-        step("Open main page", () ->
+        step("Открыть главную страницу", () ->
                 open(""));
 
-        step("Verify successful authorization", () ->
+        step("Проверка, что логин на странице соотвествует введенному", () ->
                 $(".account").shouldHave(text(login)));
     }
 
@@ -51,22 +53,20 @@ public class WebShop extends TestBase {
         getWebDriver().manage().addCookie(authCookie);
 
 
-        ResponceAddModel responceAdd = step("Make request", () ->
-                given()
+        ResponceAddModel responceAdd = step("Отправить запрос", () ->
+                given(addRequestSpec)
                         .cookie(authCookieKey, authCookieValue)
-                        .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                         .when()
-                        .post("/addproducttocart/catalog/45/1/1")
+                        .post()
                         .then()
-                        .log().all()
-                        .statusCode(200)
+                        .spec(addResponseSpec)
                         .extract().as(ResponceAddModel.class));
 
 
-        step("Open main page", () ->
+        step("Открыть главную страницу", () ->
                 open(""));
 
-        step("Verify successful authorization", () ->
+        step("Проверка количества товаров добавленных в корзину на главной странице", () ->
                 $(".cart-qty").shouldHave(text(responceAdd.getUpdatetopcartsectionhtml())));
 
     }
@@ -81,22 +81,27 @@ public class WebShop extends TestBase {
         Cookie authCookie = new Cookie(authCookieKey, authCookieValue);
         getWebDriver().manage().addCookie(authCookie);
 
-        given()
-                .cookie(authCookieKey, authCookieValue)
-                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
-                .when()
-                .post("/addproducttocart/catalog/45/1/1")
-                .then()
-                .log().all()
-                .statusCode(200);
 
 
-        step("Open main page", () ->
+        ResponceAddModel responceAdd = step("Оотправляем запрос на добавление товара", () ->
+                given(addRequestSpec)
+                        .cookie(authCookieKey, authCookieValue)
+                        .when()
+                        .post()
+                        .then()
+                        .spec(addResponseSpec)
+                .extract().as(ResponceAddModel.class));
+
+
+        step("Открываем главную страницу", () ->
                 open("/cart"));
 
-
-        $(byTagAndText("span", "Remove:")).sibling(0).click();
-        $$("input").findBy(attribute("value", "Update shopping cart")).click();
+        step("Удаляем книгу из корзины", () -> {
+            $(byTagAndText("span", "Remove:")).sibling(0).click();
+            $$("input").findBy(attribute("value", "Update shopping cart")).click();
+        });
+        step("Проверяем, что товар удален из корзины", () ->
+                $(".cart-qty").shouldNotHave(text(responceAdd.getUpdatetopcartsectionhtml())));
 
     }
 
