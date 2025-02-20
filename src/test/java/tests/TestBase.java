@@ -40,10 +40,10 @@ public class TestBase {
 
     }
 
-    @AfterEach
-    void closeWebdriver() {
-        Selenide.closeWebDriver();
-    }
+//    @AfterEach
+//    void closeWebdriver() {
+//        Selenide.closeWebDriver();
+//    }
 
     @BeforeAll
     static void setup() {
