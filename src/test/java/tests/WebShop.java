@@ -15,7 +15,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 
-
+@Tag("ApiUiTests")
 public class WebShop extends TestBase {
 
 
