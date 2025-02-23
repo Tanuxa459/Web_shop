@@ -20,7 +20,7 @@ import static specs.TestSpec.addResponseSpec;
 @Tag("ApiUiTests")
 public class WebShop extends TestBase {
 
-    @DisplayName("Тест на авторизацию")
+    
     @Test
     void loginWithApiTest() {
 
@@ -40,7 +40,7 @@ public class WebShop extends TestBase {
                 $(".account").shouldHave(text(login)));
     }
 
-    @DisplayName("Тест на добаление товара в корзину")
+    
     @Test
     void loginWithAddApiTest() {
 
@@ -71,7 +71,7 @@ public class WebShop extends TestBase {
 
     }
     
-    @DisplayName("Тест на уделения товара из корзины")
+   
     @Test
     void loginDeleteProductTest() {
 
